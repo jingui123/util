@@ -2,6 +2,8 @@ package com.zjh.util;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 
 /**
@@ -28,6 +30,18 @@ public class DateSafeUtil {
         return simpleDateFormatThreadLocal.get().parse(strDate);
     }
 
+    public static LocalDateTime toLocalDateTime(Date date) {
+        var instant = date.toInstant();
+        var zone = ZoneId.systemDefault();
+        return LocalDateTime.ofInstant(instant, zone);
+    }
+
+    public static Date toDate(LocalDateTime localDateTime) {
+        var zone = ZoneId.systemDefault();
+        var instant = localDateTime.atZone(zone).toInstant();
+        return Date.from(instant);
+    }
+
     /*public static class TestSimpleDateFormatThreadSafe extends Thread {
         @Override
         public void run() {
@@ -40,7 +54,7 @@ public class DateSafeUtil {
                 try {
                     System.out.println(this.getName()+":"+DateSafeUtil.parse("2013-05-24 06:02:20"));
                 } catch (ParseException e) {
-                    e.printStackTrace();
+                    e.printStacgitkTrace();
                 }
             }
         }
